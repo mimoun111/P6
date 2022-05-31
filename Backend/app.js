@@ -1,5 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
+const fs = require("fs");
+const morgan = require("morgan");
+const helmet = require("helmet");
+require("dotenv").config();
+
+const sauceRoutes = require("../Backend/routes/sauces");
 const userRoutes = require("../Backend/routes/user");
 
 // Connexion à la base de données
@@ -16,8 +23,13 @@ mongoose
 
 // Lancement de Express
 const app = express();
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
-// Contrôle d'acces
+// Configuration cors
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -31,6 +43,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// Parse le body les requetes en json
+app.use(express.json());
+// Log toutes les requêtes passées au serveur (sécurité)
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+
+app.use(morgan("combined", { stream: accessLogStream }));
+// Sécurise les headers
+
+// Les Routes
+app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/api/sauces", sauceRoutes);
 app.use("/api/auth", userRoutes);
 
 module.exports = app;
