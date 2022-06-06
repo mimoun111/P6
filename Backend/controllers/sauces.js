@@ -1,8 +1,7 @@
 const Sauce = require("../models/sauce");
 const fs = require("fs");
 
-// AFFICHER TOUTES LES SAUCES
-
+/////////// AFFICHER TOUTES LES SAUCES
 exports.getAllSauce = (req, res, next) => {
   Sauce.find()
     .then((sauces) => res.status(200).json(sauces))
@@ -10,7 +9,6 @@ exports.getAllSauce = (req, res, next) => {
 };
 
 /////////////////////AFFICHER UNE SEULE SAUCE
-
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => res.status(200).json(sauce))
@@ -18,7 +16,6 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 ////////////////////CRÉER UNE SAUCE
-
 exports.createSauce = (req, res, next) => {
   console.log(JSON.parse(req.body.sauce));
   const sauceObject = JSON.parse(req.body.sauce);

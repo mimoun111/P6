@@ -1,7 +1,6 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 
-// Validation des données d'entrée lors du signup et login d'un utilisateur
-
+//Validation des données d'entrée lors du signup et login d'un utilisateur
 const userSchema = Joi.object({
   email: Joi.string().trim().email().required(),
   password: Joi.string().trim().min(4).required(),
@@ -14,7 +13,15 @@ exports.user = (req, res, next) => {
     next();
   }
 };
-
+//Validation des données d'entrée lors de l'ajout ou la modification d'une sauce
+const sauceSchema = Joi.object({
+  userId: Joi.string().trim().length(24).required(),
+  name: Joi.string().trim().min(1).required(),
+  manufacturer: Joi.string().trim().min(1).required(),
+  description: Joi.string().trim().min(1).required(),
+  mainPepper: Joi.string().trim().min(1).required(),
+  heat: Joi.number().integer().min(1).max(10).required(),
+});
 exports.sauce = (req, res, next) => {
   let sauce;
   if (req.file) {
@@ -31,8 +38,7 @@ exports.sauce = (req, res, next) => {
   }
 };
 
-// Validation de l'id des sauces
-
+//Validation de l'id des sauces
 const idSchema = Joi.string().trim().length(24).required();
 exports.id = (req, res, next) => {
   const { error, value } = idSchema.validate(req.params.id);
@@ -44,7 +50,6 @@ exports.id = (req, res, next) => {
 };
 
 // Validation du like/dislike d'une sauce
-
 const likeSchema = Joi.object({
   userId: Joi.string().trim().length(24).required(),
   like: Joi.valid(-1, 0, 1).required(),
