@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const fs = require("fs");
-const morgan = require("morgan");
 const helmet = require("helmet");
 // Importation des routes
 const sauceRoutes = require("../Backend/routes/sauces");
@@ -50,8 +49,6 @@ const accessLogStream = fs.createWriteStream(
   path.join(__dirname, "access.log"),
   { flags: "a" }
 );
-// Affiche chaque requête effectué dans le fichier "asses.log"
-app.use(morgan("combined", { stream: accessLogStream }));
 
 // Les Routes
 app.use("/images", express.static(path.join(__dirname, "images")));
