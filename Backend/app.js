@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const path = require("path");
 const fs = require("fs");
 const helmet = require("helmet");
+const dotenv = require("dotenv");
+const result = dotenv.config();
+
 // Importation des routes
 const sauceRoutes = require("../Backend/routes/sauces");
 const userRoutes = require("../Backend/routes/user");
@@ -11,7 +14,7 @@ const userRoutes = require("../Backend/routes/user");
 // Connexion à la base de données
 mongoose
   .connect(
-    "mongodb+srv://MimounMohamed:Ov4RPkq82i7Ajrd8@cluster0.d3o1s.mongodb.net/?retryWrites=true&w=majority",
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.d3o1s.mongodb.net/?retryWrites=true&w=majority`,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -44,11 +47,6 @@ app.use((req, res, next) => {
 
 // Parse le body les requetes en json
 app.use(express.json());
-// Log toutes les requêtes passées au serveur (sécurité)
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, "access.log"),
-  { flags: "a" }
-);
 
 // Les Routes
 app.use("/images", express.static(path.join(__dirname, "images")));

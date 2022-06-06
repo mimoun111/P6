@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const User = require("../models/user");
+const dotenv = require("dotenv");
+const result = dotenv.config();
 
 // sauvegarde d'un nouveau User dans la base de donnée et hash le mot de passe
 exports.signup = (req, res, next) => {
